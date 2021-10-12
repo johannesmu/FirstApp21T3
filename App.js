@@ -2,14 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useState,useEffect} from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity} from 'react-native';
 import Constants from 'expo-constants'
+import {Item} from './components/Item'
 
-const Item = (props) => {
-  return(
-    <View>
-      <Text>{props.text}</Text>
-    </View>
-  )
-}
 
 export default function App() {
 
