@@ -7,23 +7,47 @@ import { Item } from './components/Item'
 
 export default function App() {
 
-  const [ data, setData ] = useState()
+  const [ data, setData ] = useState([])
+  const [ validInput, setValidInput ] = useState(false)
+  const [ input, setInput ] = useState()
 
-  const AppData = [
-    { id: "1", name: "Apple" },
-    { id: "2", name: "Orange" },
-    { id: "3", name: "Banana" },
-    { id: "4", name: "Blueberry" },
-    { id: "5", name: "Tomato" },
-  ]
+  // const AppData = [
+  //   { id: "1", name: "Apple" },
+  //   { id: "2", name: "Orange" },
+  //   { id: "3", name: "Banana" },
+  //   { id: "4", name: "Blueberry" },
+  //   { id: "5", name: "Tomato" },
+  // ]
+
+  const onTextChange = (value) => {
+    if( value.length >= 3 ) 
+    { 
+      setValidInput(true)
+      setInput( value )
+    }
+    else
+    {
+      setValidInput(false)
+    }
+  }
+
+  const onSubmit = ( event ) => {
+    const id = new Date().getTime().toString()
+    const item = { id: id, name: input }
+    setData([...data, item ])
+  }
 
   const Renderer = ({ item }) => (<Item text={item.name} />)
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TextInput style={styles.input} />
-        <TouchableOpacity style={styles.button}>
+        <TextInput style={styles.input} onChangeText={ onTextChange } placeholder="min 3 characters" />
+        <TouchableOpacity 
+          style={ (validInput) ? styles.button : styles.buttonDisabled } 
+          disabled={ (validInput) ? false : true }
+          onPress={onSubmit}
+        >
           <Text style={styles.buttonText}>Add to list</Text>
         </TouchableOpacity>
       </View>
@@ -56,5 +80,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     padding: 10,
+  },
+  buttonDisabled: {
+    backgroundColor: "lightgray"
   },
 });
