@@ -11,19 +11,11 @@ export default function App() {
   const [ validInput, setValidInput ] = useState(false)
   const [ input, setInput ] = useState()
 
-  // const AppData = [
-  //   { id: "1", name: "Apple" },
-  //   { id: "2", name: "Orange" },
-  //   { id: "3", name: "Banana" },
-  //   { id: "4", name: "Blueberry" },
-  //   { id: "5", name: "Tomato" },
-  // ]
-
   const onTextChange = (value) => {
+    setInput( value )
     if( value.length >= 3 ) 
     { 
       setValidInput(true)
-      setInput( value )
     }
     else
     {
@@ -35,14 +27,30 @@ export default function App() {
     const id = new Date().getTime().toString()
     const item = { id: id, name: input }
     setData([...data, item ])
+    setInput(null)
   }
 
-  const Renderer = ({ item }) => (<Item text={item.name} />)
+  const onDelete = (id) => {
+    let items = [...data]
+    let newData = items.filter( (item) => {
+      if( item.id !== id ) {
+        return item
+      }
+    })
+    setData( newData )
+  }
+
+  const Renderer = ({ item }) => (<Item text={item.name} delete={onDelete} id={item.id} />)
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TextInput style={styles.input} onChangeText={ onTextChange } placeholder="min 3 characters" />
+        <TextInput 
+          style={styles.input} 
+          onChangeText={ onTextChange } 
+          placeholder="min 3 characters" 
+          value={input}
+        />
         <TouchableOpacity 
           style={ (validInput) ? styles.button : styles.buttonDisabled } 
           disabled={ (validInput) ? false : true }

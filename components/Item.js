@@ -1,9 +1,11 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Button } from 'react-native'
 export const Item = (props) => {
+  
   return(
     <View style={styles.container}>
-      <Text>{props.text}</Text>
+      <Text style={styles.text }>{props.text}</Text>
+      <Button title="delete" onPress={ () => props.delete( props.id ) } />
     </View>
   )
 }
@@ -14,5 +16,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgreen',
     borderBottomColor: 'black',
     borderBottomWidth: 1,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  text: {
+    flex: 1,
   },
 })
