@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Constants from 'expo-constants'
 import { Item } from './components/Item'
 
@@ -28,6 +29,7 @@ export default function App() {
     const item = { id: id, name: input }
     setData([...data, item ])
     setInput(null)
+    storeData()
   }
 
   const onDelete = (id) => {
@@ -38,7 +40,33 @@ export default function App() {
       }
     })
     setData( newData )
+    storeData()
   }
+
+  const storeData = async () => {
+    const stringified = JSON.stringify( data )
+    try {
+      await AsyncStorage.setItem( "listData" , stringified ) 
+    } catch (error) {
+      console.log( error )
+    }
+  }
+
+  const getData = async () => {
+    try {
+      const stringified = await AsyncStorage.getItem("listData")
+      console.log( stringified )
+      setData( (stringified !== null) ? JSON.parse(stringified) : [] )
+    } catch (error) {
+      console.log( error )
+    }
+  }
+
+  useEffect( () => {
+    if( !data ) {
+      getData()
+    }
+  }, [data])
 
   const Renderer = ({ item }) => (<Item text={item.name} delete={onDelete} id={item.id} />)
 
