@@ -17,11 +17,11 @@ export default function App() {
     if( appInit ) {
       getData()
       setAppInit( false )
-      console.log('getting data...')
+      // console.log('getting data...')
     }
     else {
       storeData()
-      console.log('storing data...')
+      // console.log('storing data...')
     }
   }, [data] )
 
@@ -67,7 +67,6 @@ export default function App() {
   const getData = async () => {
     try {
       const stringified = await AsyncStorage.getItem("listData")
-      console.log( stringified )
       setData( (stringified !== null) ? JSON.parse(stringified) : [] )
     } catch (error) {
       console.log( error )
