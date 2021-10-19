@@ -11,6 +11,19 @@ export default function App() {
   const [ data, setData ] = useState([])
   const [ validInput, setValidInput ] = useState(false)
   const [ input, setInput ] = useState()
+  const [ appInit, setAppInit ] = useState( true )
+
+  useEffect( () => {
+    if( appInit ) {
+      getData()
+      setAppInit( false )
+      console.log('getting data...')
+    }
+    else {
+      storeData()
+      console.log('storing data...')
+    }
+  }, [data] )
 
   const onTextChange = (value) => {
     setInput( value )
@@ -29,7 +42,7 @@ export default function App() {
     const item = { id: id, name: input }
     setData([...data, item ])
     setInput(null)
-    storeData()
+    setValidInput( false )
   }
 
   const onDelete = (id) => {
@@ -40,7 +53,6 @@ export default function App() {
       }
     })
     setData( newData )
-    storeData()
   }
 
   const storeData = async () => {
@@ -61,12 +73,6 @@ export default function App() {
       console.log( error )
     }
   }
-
-  useEffect( () => {
-    if( !data ) {
-      getData()
-    }
-  }, [data])
 
   const Renderer = ({ item }) => (<Item text={item.name} delete={onDelete} id={item.id} />)
 
