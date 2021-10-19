@@ -6,6 +6,7 @@ export const Item = (props) => {
     <View style={styles.container}>
       <Text style={styles.text }>{props.text}</Text>
       <Button title="delete" onPress={ () => props.delete( props.id ) } />
+      <Button title="done"  />
     </View>
   )
 }

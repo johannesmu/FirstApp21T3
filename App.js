@@ -11,6 +11,18 @@ export default function App() {
   const [ data, setData ] = useState([])
   const [ validInput, setValidInput ] = useState(false)
   const [ input, setInput ] = useState()
+  const [ appInit, setAppInit ] = useState( true )
+  
+  useEffect( () => {
+    if( appInit && data.length === 0 ) {
+      getData()
+      setAppInit( false )
+    }
+    else {
+      storeData()
+    }
+  }, [data] )
+
 
   const onTextChange = (value) => {
     setInput( value )
@@ -24,23 +36,29 @@ export default function App() {
     }
   }
 
-  const onSubmit = ( event ) => {
+  const onSubmit = () => {
     const id = new Date().getTime().toString()
-    const item = { id: id, name: input }
-    setData([...data, item ])
+    const item = { id: id, name: input, status: false }
+    //setData([...data, item ])
+    setData( data.concat(item) )
     setInput(null)
-    storeData()
+    setValidInput(false)
+    // storeData()
   }
 
   const onDelete = (id) => {
     let items = [...data]
-    let newData = items.filter( (item) => {
+    // use filter to return only items not being deleted
+    let newData = items.filter( (item, index ) => {
       if( item.id !== id ) {
         return item
       }
     })
     setData( newData )
-    storeData()
+  }
+
+  const onDone = (id) => {
+
   }
 
   const storeData = async () => {
@@ -55,18 +73,14 @@ export default function App() {
   const getData = async () => {
     try {
       const stringified = await AsyncStorage.getItem("listData")
-      console.log( stringified )
+      // console.log( stringified )
       setData( (stringified !== null) ? JSON.parse(stringified) : [] )
     } catch (error) {
       console.log( error )
     }
   }
 
-  useEffect( () => {
-    if( !data ) {
-      getData()
-    }
-  }, [data])
+  
 
   const Renderer = ({ item }) => (<Item text={item.name} delete={onDelete} id={item.id} />)
 
