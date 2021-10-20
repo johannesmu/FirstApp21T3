@@ -23,6 +23,7 @@ export default function App() {
       storeData()
       // console.log('storing data...')
     }
+    // sortData()
   }, [data] )
 
   const onTextChange = (value) => {
@@ -65,7 +66,14 @@ export default function App() {
     setData( items )
   }
 
-  
+  const sortData = () => {
+    let items = [...data]
+    console.log( items )
+    items.sort( ( item1, item2 ) => {
+      return item1.status - item2.status
+    } )
+    setData( items )
+  }
 
   const storeData = async () => {
     const stringified = JSON.stringify( data )
